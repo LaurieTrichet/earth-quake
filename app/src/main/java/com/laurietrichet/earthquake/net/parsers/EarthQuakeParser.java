@@ -1,6 +1,6 @@
-package com.laurietrichet.earthquake.com.laurietrichet.earthquake.net.parsers;
+package com.laurietrichet.earthquake.net.parsers;
 
-import com.laurietrichet.earthquake.com.laurietrichet.earthquake.model.EarthQuake;
+import com.laurietrichet.earthquake.model.EarthQuake;
 
 import org.json.JSONObject;
 

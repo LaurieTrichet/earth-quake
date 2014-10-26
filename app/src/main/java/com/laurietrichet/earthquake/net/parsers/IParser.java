@@ -1,4 +1,4 @@
-package com.laurietrichet.earthquake.com.laurietrichet.earthquake.net.parsers;
+package com.laurietrichet.earthquake.net.parsers;
 
 import org.json.JSONObject;
 

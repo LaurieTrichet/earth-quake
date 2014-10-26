@@ -1,4 +1,4 @@
-package com.laurietrichet.earthquake.com.laurietrichet.earthquake.net;
+package com.laurietrichet.earthquake.net.client;
 
 import java.util.List;
 

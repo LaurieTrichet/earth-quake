@@ -1,6 +1,6 @@
-package com.laurietrichet.earthquake.com.laurietrichet.earthquake.net;
+package com.laurietrichet.earthquake.net.client;
 
-import com.laurietrichet.earthquake.com.laurietrichet.earthquake.model.EarthQuake;
+import com.laurietrichet.earthquake.model.EarthQuake;
 
 import java.util.List;
 
@@ -8,6 +8,10 @@ import java.util.List;
  * Created by laurie on 26/10/2014.
  */
 public class EarthQuakeLWS implements ILightWebServiceClient <EarthQuake> {
+
+    public static void init (){
+
+    }
 
     public List<EarthQuake> get (String url){
 
