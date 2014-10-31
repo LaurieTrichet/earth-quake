@@ -1,7 +1,7 @@
 package com.laurietrichet.earthquake.net.parsers;
 
-import com.laurietrichet.earthquake.application.AppController;
 import com.laurietrichet.earthquake.model.EarthQuake;
+import com.laurietrichet.earthquake.net.VolleyHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -10,44 +10,61 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by laurie on 26/10/2014.
+ * Parser for EarthQuake object using {@link org.json.JSONObject}
  */
-public class EarthQuakeParser implements IParser <EarthQuake> {
+public class EarthQuakeParser {
 
-    private EarthQuake mEarthQuake;
-    List <EarthQuake> mEarthQuakes;
+    public static final String SRC = "src";
+    public static final String EQID = "eqid";
+    public static final String TIMEDATE = "timedate";
+    public static final String LAT = "lat";
+    public static final String LON = "lon";
+    public static final String MAGNITUDE = "magnitude";
+    public static final String DEPTH = "depth";
+    public static final String REGION = "region";
 
-    public EarthQuakeParser (){
-        mEarthQuake = new EarthQuake();
-        mEarthQuakes = new ArrayList<EarthQuake>();
+    public static final String COUNT = "count";
+    public static final String EARTHQUAKES = "earthquakes";
+
+    private EarthQuakeParser () {};
+
+    /**
+     * get a json string and return a list of EarthQuake objects.
+     * according to webservice input format should be {"earthquakes":[{...}]}
+     * @param jsonString
+     * @return list of EarthQuake objects.
+     * @throws Exception when a json object cannot be parsed
+     */
+    public static List <EarthQuake> parse (String jsonString) throws Exception{
+        JSONObject jsonResponse = new JSONObject(jsonString);
+        JSONArray jsonArrayEarthQuakes = jsonResponse.getJSONArray(EARTHQUAKES);
+        List <EarthQuake> arrayEarthQuakes = parseArray(jsonArrayEarthQuakes);
+        return arrayEarthQuakes;
     }
 
-    @Override
-    public EarthQuake parseObject (JSONObject obj) throws Exception{
+    private static EarthQuake parseObject (JSONObject obj) throws Exception{
+        EarthQuake.Builder builder = new EarthQuake.Builder();
+        builder.src(obj.optString(SRC, null))
+        .eqid (obj.optString(EQID, null))
+        .timedate( VolleyHelper.getDateFormat().parse( obj.optString(TIMEDATE, null)))
+        .lat ( Float.parseFloat(obj.optString(LAT, null)))
+        .lon ( Float.parseFloat(obj.optString(LON, null)))
+        .magnitude ( obj.optDouble(MAGNITUDE, 0.d))
+        .depth ( obj.optDouble(DEPTH, 0.d))
+        .region ( obj.optString(REGION, null));
 
-        mEarthQuake.src = obj.optString("src", null);
-        mEarthQuake.eqid = obj.optString("eqid", null);
-        mEarthQuake.timedate = AppController.getDateFormat().parse( obj.optString("timedate", null));
-        mEarthQuake.lat = Float.parseFloat(obj.optString("lat", null));
-        mEarthQuake.lon = Float.parseFloat(obj.optString("lon", null));
-        mEarthQuake.magnitude = obj.optDouble("magnitude", 0.d);
-        mEarthQuake.depth = obj.optDouble("depth", 0.d);
-        mEarthQuake.region = obj.optString("region", null);
-
-        return mEarthQuake;
+        return builder.build();
     }
 
-    @Override
-    public List<EarthQuake> parseArray(JSONArray array) throws Exception {
+    private static List<EarthQuake> parseArray(JSONArray array) throws Exception {
+        List <EarthQuake> arrayEarthQuakes = new ArrayList<EarthQuake>();
         JSONObject jsonEarthQuake = null;
-        mEarthQuakes.clear();
+        arrayEarthQuakes.clear();
         for (int jsonArrayIndex = 0 ; jsonArrayIndex < array.length();
              jsonArrayIndex++ ){
             jsonEarthQuake = array.getJSONObject(jsonArrayIndex);
-
-            mEarthQuakes.add(this.parseObject(jsonEarthQuake));
+            arrayEarthQuakes.add(parseObject(jsonEarthQuake));
         }
-
-        return mEarthQuakes;
+        return arrayEarthQuakes;
     }
 }

@@ -1,30 +1,36 @@
 package com.laurietrichet.earthquake.activities;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v4.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.laurietrichet.earthquake.R;
+import com.laurietrichet.earthquake.fragments.EarthQuakeMapFragment;
+import com.laurietrichet.earthquake.fragments.ItemFragment;
+import com.laurietrichet.earthquake.model.EarthQuake;
 
 
-public class HomeActivity extends ActionBarActivity {
+public class HomeActivity extends ActionBarActivity
+            implements ItemFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
+            ItemFragment fragment =
+                    (ItemFragment) getSupportFragmentManager().findFragmentById(R.id.listFragment);
+            if (fragment==null || ! fragment.isInLayout()) {
+                getSupportFragmentManager().beginTransaction()
+                        .add(R.id.container, new ItemFragment())
+                        .commit();
+            }
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -45,19 +51,27 @@ public class HomeActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        switch (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this)){
+            case ConnectionResult.SUCCESS:
+                break;
+            default:
+                break;
         }
+    }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-            return rootView;
+    @Override
+    public void onFragmentInteraction(EarthQuake earthQuake) {
+        EarthQuakeMapFragment fragment =
+                (EarthQuakeMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
+        if (fragment==null || ! fragment.isInLayout()) {
+            Intent intent = new Intent(getApplicationContext(), EarthQuakeMapActivity.class);
+            intent.putExtra(EarthQuakeMapActivity.EARTH_QUAKE, earthQuake);
+            startActivity(intent);
+        } else {
+            fragment.setEarthQuakeMarker(earthQuake);
         }
     }
 }
