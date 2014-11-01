@@ -11,7 +11,7 @@ import java.util.List;
 import static com.laurietrichet.earthquake.net.client.IWebServiceClient.WebServiceClientListener;
 
 /**
- * Created by laurie on 29/10/2014.
+ * Implementation of {@link com.laurietrichet.earthquake.data.IDataAccessor} for EarthQuake object
  */
 public class EarthQuakeDataAccessor implements IDataAccessor {
 
@@ -40,8 +40,23 @@ public class EarthQuakeDataAccessor implements IDataAccessor {
 
     @Override
     public void getAll (DataAccessorListener listener){
+
         mClient = new EQWebServiceClient(mContext);
         mDataAccessorListener = listener;
         mClient.get(mListener);
+        /*
+        InputStream stream = null;
+        try {
+            stream = mContext.getAssets().open("eqs.json");
+            String json = FileUtility.file2String(stream);
+            listener.onSuccess(EarthQuakeParser.parse(json));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        */
     }
 }
