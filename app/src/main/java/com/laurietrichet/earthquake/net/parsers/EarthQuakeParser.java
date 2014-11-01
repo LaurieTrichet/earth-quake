@@ -1,7 +1,6 @@
 package com.laurietrichet.earthquake.net.parsers;
 
 import com.laurietrichet.earthquake.model.EarthQuake;
-import com.laurietrichet.earthquake.net.VolleyHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -32,7 +31,7 @@ public class EarthQuakeParser {
     /**
      * get a json string and return a list of EarthQuake objects.
      * according to webservice input format should be {"earthquakes":[{...}]}
-     * @param jsonString
+     * @param jsonString String to be parsed
      * @return list of EarthQuake objects.
      * @throws Exception when a json object cannot be parsed
      */
@@ -47,7 +46,7 @@ public class EarthQuakeParser {
         EarthQuake.Builder builder = new EarthQuake.Builder();
         builder.src(obj.optString(SRC, null))
         .eqid (obj.optString(EQID, null))
-        .timedate( VolleyHelper.getDateFormat().parse( obj.optString(TIMEDATE, null)))
+        .timedate( EarthQuake.getDateFormat().parse( obj.optString(TIMEDATE, null)))
         .lat ( Float.parseFloat(obj.optString(LAT, null)))
         .lon ( Float.parseFloat(obj.optString(LON, null)))
         .magnitude ( obj.optDouble(MAGNITUDE, 0.d))

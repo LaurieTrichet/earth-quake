@@ -6,11 +6,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.laurietrichet.earthquake.net.requests.EarthQuakeRequest;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
 /**
- * Created by laurie on 26/10/2014.
+ * Singleton to wrap {@link com.android.volley.toolbox.Volley} library
  */
 public enum  VolleyHelper {
 
@@ -18,18 +15,11 @@ public enum  VolleyHelper {
 
     private RequestQueue mRequestQueue = null;
 
-    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-    private static SimpleDateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.US);
-
-    public RequestQueue getRequestQueue(Context context) {
-        checkInit (context);
-        return mRequestQueue;
-    }
-
-    public static SimpleDateFormat getDateFormat (){
-        return mDateFormat;
-    }
-
+    /**
+     * Initialize and return the {@link com.android.volley.RequestQueue} to add volley request
+     * @param context requested from the volley library
+     * @param request request to add to the queue
+     */
     public void addToRequestQueue(Context context,EarthQuakeRequest request) {
         checkInit (context);
         mRequestQueue.add(request);

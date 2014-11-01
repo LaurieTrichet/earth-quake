@@ -123,8 +123,8 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
 
 
     /**
-     * ask for adapter to reload its data set from the List<EarthQuake> given
-     * @param earthQuakeList
+     * Ask for adapter to reload its data set from the List<EarthQuake> given
+     * @param earthQuakeList a list to be passed to the adapter
      */
     public void updateData (List<EarthQuake> earthQuakeList){
         mAdapter.updateEarthQuakes(earthQuakeList);

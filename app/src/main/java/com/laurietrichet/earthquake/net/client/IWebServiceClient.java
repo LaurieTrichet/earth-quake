@@ -7,20 +7,20 @@ package com.laurietrichet.earthquake.net.client;
 public interface IWebServiceClient<T>{
 
     /**
-     * listen to result from webservice
+     * called when the web service has processed a response
      * @param <T>
      */
     public interface WebServiceClientListener <T>{
 
         /**
-         * result to process
-         * @param obj
+         * called when the request has succeed
+         * @param obj result object to process
          */
         public void onSuccess(T obj);
 
         /**
-         * error occurred during process
-         * @param error
+         * called when an error occurred during process
+         * @param error error to process
          */
         public void onError (Error error);
     }

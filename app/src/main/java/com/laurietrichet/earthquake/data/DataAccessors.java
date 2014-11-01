@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by laurie on 30/10/2014.
+ * Singleton to access data model
  */
 public enum DataAccessors {
 

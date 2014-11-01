@@ -12,8 +12,8 @@ import com.laurietrichet.earthquake.net.VolleyHelper;
 import java.util.List;
 
 /**
- * Created by laurie on 26/10/2014.
- * IWebServiceClient implementation to deal with @link EarthQuake objects
+ * IWebServiceClient implementation to get {@link com.laurietrichet.earthquake.model.EarthQuake} objects.
+ * Use {@link com.android.volley.toolbox.Volley} library
  */
 public class EQWebServiceClient implements IWebServiceClient {
 

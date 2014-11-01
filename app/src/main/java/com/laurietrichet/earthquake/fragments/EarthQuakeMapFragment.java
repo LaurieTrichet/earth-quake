@@ -17,10 +17,6 @@ import java.util.List;
 /**
  * A simple {@link SupportMapFragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link EarthQuakeMapFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link EarthQuakeMapFragment#newInstance} factory method to
- * create an instance of this fragment.
  *
  */
 public class EarthQuakeMapFragment extends SupportMapFragment {
@@ -28,13 +24,9 @@ public class EarthQuakeMapFragment extends SupportMapFragment {
     public static final String EARTH_QUAKE = "EARTH_QUAKE";
     public static final String EARTH_QUAKE_LIST = "EARTH_QUAKE_LIST";
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*if (getArguments() != null){
-            readArguments ();
-        }*/
     }
 
     @Override
@@ -68,7 +60,7 @@ public class EarthQuakeMapFragment extends SupportMapFragment {
 
     /**
      * Set all the markers on the map from the list of earth quakes given
-     * @param earthQuakeList // List <EarthQuake>
+     * @param earthQuakeList A list providing the data to place on the map
      */
     public void setEarthQuakeMarkers (List <EarthQuake> earthQuakeList){
         for (EarthQuake earthQuake : earthQuakeList){

@@ -3,14 +3,18 @@ package com.laurietrichet.earthquake.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.laurietrichet.earthquake.net.VolleyHelper;
-
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Locale;
 
 /**
- * Created by laurie on 26/10/2014.
+ * Earth quake model object
+ * @implements {@link android.os.Parcelable}
+ * @implements {@link java.lang.Comparable}
+ *
+ * Use the {@link com.laurietrichet.earthquake.model.EarthQuake.Builder} object to construct a new object
  */
 public class EarthQuake implements Parcelable, Comparable <EarthQuake>{
 
@@ -23,13 +27,17 @@ public class EarthQuake implements Parcelable, Comparable <EarthQuake>{
     private Double depth;
     private String region;
 
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
+    private static SimpleDateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+
     private EarthQuake(){};
 
     private EarthQuake(Parcel in) {
         src = in.readString();
         eqid = in.readString();
         try {
-            timedate = VolleyHelper.getDateFormat().parse(in.readString());
+            timedate = getDateFormat().parse(in.readString());
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -49,7 +57,7 @@ public class EarthQuake implements Parcelable, Comparable <EarthQuake>{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(src);
         dest.writeString(eqid);
-        dest.writeString(VolleyHelper.getDateFormat().format(timedate));
+        dest.writeString(getDateFormat().format(timedate));
         dest.writeString("" +lat);
         dest.writeString("" +lon);
         dest.writeDouble(magnitude);
@@ -203,11 +211,11 @@ public class EarthQuake implements Parcelable, Comparable <EarthQuake>{
     }
 
     /**
-     *
-     * @return formatted datetime
+     * Utility function to get the Date formatter to data received from the service
+     * @return SimpleDateFormat a formatter for the web service date format.
      */
-    public String getTimedateStr() {
-        return VolleyHelper.getDateFormat().format(timedate);
+    public static SimpleDateFormat getDateFormat (){
+        return mDateFormat;
     }
 
     @Override
@@ -216,7 +224,7 @@ public class EarthQuake implements Parcelable, Comparable <EarthQuake>{
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{").append("src : "+src)
                 .append(" eqid : "+eqid)
-                .append(" timedate : "+VolleyHelper.getDateFormat().format(timedate))
+                .append(" timedate : "+ getDateFormat().format(timedate))
                 .append(" (lat, lon) : ("+lat+";"+lon+")")
                 .append(" magnitude : "+magnitude)
                 .append(" depth : "+depth)
