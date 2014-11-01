@@ -24,11 +24,11 @@ public class EarthQuakeRequest extends JsonRequest <List<EarthQuake>>{
 
     /**
      * Construct a request to be pushed in the Volley request queue for processing
-     * @param method
-     * @param url
-     * @param requestBody
-     * @param listener
-     * @param errorListener
+     * @param method GET, POST, PUT, DELETE
+     * @param url url of the web service to reach
+     * @param requestBody body for POST, PUT methods
+     * @param listener will be called when the request has successfully finished
+     * @param errorListener will be called when the request has failed
      */
     public EarthQuakeRequest(int method, String url, String requestBody,
                              Response.Listener<List<EarthQuake>> listener,

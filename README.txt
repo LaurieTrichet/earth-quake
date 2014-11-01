@@ -22,7 +22,7 @@ Builder : Because the earthquake object has more than 4 members, it preferable t
 
 Testing
 --------
-Simple unit testing of data parsing.
+Unit testing of data parsing.
 
 Reusability
 --------------
