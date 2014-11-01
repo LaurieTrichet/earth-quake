@@ -38,8 +38,8 @@ public class EarthQuakeRequest extends JsonRequest <List<EarthQuake>>{
 
     @Override
     protected Response<List<EarthQuake>> parseNetworkResponse(NetworkResponse networkResponse) {
-        List<EarthQuake> arrayEarthQuake = null;
-        String jsonString = null;
+        List<EarthQuake> arrayEarthQuake;
+        String jsonString;
         try {
             jsonString = new String (networkResponse.data,
                     HttpHeaderParser.parseCharset(networkResponse.headers));

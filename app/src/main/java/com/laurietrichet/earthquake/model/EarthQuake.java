@@ -2,6 +2,7 @@ package com.laurietrichet.earthquake.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,8 +12,8 @@ import java.util.Locale;
 
 /**
  * Earth quake model object
- * @implements {@link android.os.Parcelable}
- * @implements {@link java.lang.Comparable}
+ * implements {@link android.os.Parcelable}
+ * implements {@link java.lang.Comparable}
  *
  * Use the {@link com.laurietrichet.earthquake.model.EarthQuake.Builder} object to construct a new object
  */
@@ -29,9 +30,9 @@ public class EarthQuake implements Parcelable, Comparable <EarthQuake>{
 
     private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-    private static SimpleDateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+    private static final SimpleDateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.US);
 
-    private EarthQuake(){};
+    private EarthQuake(){}
 
     private EarthQuake(Parcel in) {
         src = in.readString();
@@ -88,18 +89,18 @@ public class EarthQuake implements Parcelable, Comparable <EarthQuake>{
     }
 
     @Override
-    public int compareTo(EarthQuake another) {
+    public int compareTo(@NonNull EarthQuake another) {
         return Double.compare(this.magnitude, another.magnitude);
     }
 
-    private static Comparator <EarthQuake> mDateComparator = new Comparator<EarthQuake>() {
+    private final static Comparator <EarthQuake>  mDateComparator = new Comparator<EarthQuake>() {
         @Override
-        public int compare(EarthQuake lhs, EarthQuake rhs) {
+        public int compare(final EarthQuake lhs, final EarthQuake rhs) {
             return (lhs.timedate.compareTo(rhs.timedate));
         }
     };
 
-    private static Comparator <EarthQuake> mEqidComparator = new Comparator<EarthQuake>() {
+    private final static Comparator <EarthQuake> mEqidComparator = new Comparator<EarthQuake>() {
         @Override
         public int compare(EarthQuake lhs, EarthQuake rhs) {
             return (lhs.eqid.compareTo(rhs.eqid));
@@ -221,14 +222,12 @@ public class EarthQuake implements Parcelable, Comparable <EarthQuake>{
     @Override
     public String toString() {
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("{").append("src : "+src)
-                .append(" eqid : "+eqid)
-                .append(" timedate : "+ getDateFormat().format(timedate))
-                .append(" (lat, lon) : ("+lat+";"+lon+")")
-                .append(" magnitude : "+magnitude)
-                .append(" depth : "+depth)
-                .append(" region : "+region);
-        return stringBuilder.toString();
+        return "{" + "src : " + src +
+                " eqid : " + eqid +
+                " timedate : " + getDateFormat().format(timedate) +
+                " (lat, lon) : (" + lat + ";" + lon + ")" +
+                " magnitude : " + magnitude +
+                " depth : " + depth +
+                " region : " + region;
     }
 }

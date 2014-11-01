@@ -75,7 +75,7 @@ public class EarthQuakeListAdapter extends BaseAdapter{
             holder = (Holder)convertView.getTag();
         }
 
-        holder.date.setText(earthQuake.getTimedateStr());
+        holder.date.setText(EarthQuake.getDateFormat().format(earthQuake.getTimedate()));
         holder.magnitude.setText("Magnitude : "+earthQuake.getMagnitude());
         holder.depth.setText("Depth : "+earthQuake.getDepth());
         holder.region.setText(earthQuake.getRegion());
@@ -84,7 +84,12 @@ public class EarthQuakeListAdapter extends BaseAdapter{
         return convertView;
     }
 
-    void updateEarthQuakes(List<EarthQuake> earthQuakeList){
+    /**
+     * replace the current list by the one given in parameter and notify that the data set has changed
+     * @throws IllegalStateException if not used in main thread in Debug mode
+     * @param earthQuakeList the new list to set to the adapter
+     */
+    public void updateEarthQuakes(List<EarthQuake> earthQuakeList){
         //check multithreading safety
         if (BuildConfig.DEBUG) {
             if (Thread.currentThread() != Looper.getMainLooper().getThread()) {

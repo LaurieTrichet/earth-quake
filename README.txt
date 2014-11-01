@@ -14,11 +14,15 @@ Dependencies
 - Android support v4
 - Android support v7
 
-Pattern used
--------------
+Software Patterns
+-----------------
 Singleton: The singleton allows the access of data through the application. The singleton object is keep in memory the application's lifetime.
 Enum Singleton : The enum singleton thread safety is guaranteed by JVM.
 Builder : Because the earthquake object has more than 4 members, it preferable to use a builder for readability.
+
+Software design
+---------------
+Encapsulation: to guaranty that the data cannot be alterated to cause side effects.
 
 Testing
 --------

@@ -23,10 +23,9 @@ public class EarthQuakeParser {
     public static final String DEPTH = "depth";
     public static final String REGION = "region";
 
-    public static final String COUNT = "count";
     public static final String EARTHQUAKES = "earthquakes";
 
-    private EarthQuakeParser () {};
+    private EarthQuakeParser () {}
 
     /**
      * get a json string and return a list of EarthQuake objects.
@@ -38,8 +37,7 @@ public class EarthQuakeParser {
     public static List <EarthQuake> parse (String jsonString) throws Exception{
         JSONObject jsonResponse = new JSONObject(jsonString);
         JSONArray jsonArrayEarthQuakes = jsonResponse.getJSONArray(EARTHQUAKES);
-        List <EarthQuake> arrayEarthQuakes = parseArray(jsonArrayEarthQuakes);
-        return arrayEarthQuakes;
+        return parseArray(jsonArrayEarthQuakes);
     }
 
     private static EarthQuake parseObject (JSONObject obj) throws Exception{
@@ -60,12 +58,12 @@ public class EarthQuakeParser {
         List <EarthQuake> arrayEarthQuakes = new ArrayList<EarthQuake>();
         JSONObject jsonEarthQuake;
         EarthQuake earthQuake;
-        arrayEarthQuakes.clear();
-        int indexForInsertion = 0;
-        for (int jsonArrayIndex = 0 ; jsonArrayIndex < array.length();
-             jsonArrayIndex++ ){
+        int indexForInsertion;
+
+        for (int jsonArrayIndex = 0 ; jsonArrayIndex < array.length();jsonArrayIndex++ ){
             jsonEarthQuake = array.getJSONObject(jsonArrayIndex);
             earthQuake = parseObject(jsonEarthQuake);
+
             //control for multiple occurrences
             indexForInsertion = Collections.binarySearch(
                     arrayEarthQuakes,
