@@ -1,6 +1,5 @@
 package com.laurietrichet.earthquake.fragments;
 
-import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
@@ -22,12 +21,7 @@ import java.util.List;
 public class EarthQuakeMapFragment extends SupportMapFragment {
 
     public static final String EARTH_QUAKE = "EARTH_QUAKE";
-    public static final String EARTH_QUAKE_LIST = "EARTH_QUAKE_LIST";
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private static final String EARTH_QUAKE_LIST = "EARTH_QUAKE_LIST";
 
     @Override
     public void onResume() {

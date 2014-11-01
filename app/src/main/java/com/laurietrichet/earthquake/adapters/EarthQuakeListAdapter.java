@@ -67,10 +67,12 @@ public class EarthQuakeListAdapter extends BaseAdapter{
 
             holder = new Holder();
 
-            holder.date = (TextView)convertView.findViewById(R.id.textViewTimeDate);
-            holder.magnitude = (TextView)convertView.findViewById(R.id.textViewMagnitude);
-            holder.depth = (TextView)convertView.findViewById(R.id.textViewDepth);
-            holder.region = (TextView)convertView.findViewById(R.id.textViewRegion);
+            if (convertView != null) {
+                holder.date = (TextView)convertView.findViewById(R.id.textViewTimeDate);
+                holder.magnitude = (TextView)convertView.findViewById(R.id.textViewMagnitude);
+                holder.depth = (TextView)convertView.findViewById(R.id.textViewDepth);
+                holder.region = (TextView)convertView.findViewById(R.id.textViewRegion);
+            }
         } else {
             holder = (Holder)convertView.getTag();
         }
@@ -80,7 +82,9 @@ public class EarthQuakeListAdapter extends BaseAdapter{
         holder.depth.setText("Depth : "+earthQuake.getDepth());
         holder.region.setText(earthQuake.getRegion());
 
-        convertView.setTag(holder);
+        if (convertView != null) {
+            convertView.setTag(holder);
+        }
         return convertView;
     }
 
@@ -90,7 +94,7 @@ public class EarthQuakeListAdapter extends BaseAdapter{
      * @param earthQuakeList the new list to set to the adapter
      */
     public void updateEarthQuakes(List<EarthQuake> earthQuakeList){
-        //check multithreading safety
+        //check multi threading safety
         if (BuildConfig.DEBUG) {
             if (Thread.currentThread() != Looper.getMainLooper().getThread()) {
                 throw new IllegalStateException("This method should be called from the Main Thread");

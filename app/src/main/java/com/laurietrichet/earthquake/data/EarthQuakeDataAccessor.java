@@ -15,13 +15,13 @@ import static com.laurietrichet.earthquake.net.client.IWebServiceClient.WebServi
  */
 public class EarthQuakeDataAccessor implements IDataAccessor {
 
-    private Context mContext;
+    private final Context mContext;
 
     private DataAccessorListener <List<EarthQuake>> mDataAccessorListener;
 
     private IWebServiceClient mClient ;
 
-    private WebServiceClientListener <List<EarthQuake>> mListener =
+    private final WebServiceClientListener <List<EarthQuake>> mListener =
             new WebServiceClientListener<List<EarthQuake>>() {
         @Override
         public void onSuccess(List<EarthQuake> obj) {

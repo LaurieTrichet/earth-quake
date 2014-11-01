@@ -97,16 +97,6 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
     /**
     * This interface must be implemented by activities that contain this
     * fragment to allow an interaction in this fragment to be communicated
@@ -121,7 +111,6 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
         public void onFragmentInteraction(EarthQuake earthQuake);
     }
 
-
     /**
      * Ask for adapter to reload its data set from the List<EarthQuake> given
      * @param earthQuakeList a list to be passed to the adapter
@@ -129,5 +118,4 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
     public void updateData (List<EarthQuake> earthQuakeList){
         mAdapter.updateEarthQuakes(earthQuakeList);
     }
-
 }

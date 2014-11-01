@@ -27,9 +27,9 @@ import static com.laurietrichet.earthquake.data.DataAccessors.EARTH_QUAKE_DATA_A
 public class EQHomeActivity extends ActionBarActivity
         implements ItemFragment.OnFragmentInteractionListener {
 
-    private enum SortingOrder {DATE_DESC, MAG_DESC};
+    private enum SortingOrder {DATE_DESC, MAG_DESC}
 
-    private SortingOrder sortingOrder = SortingOrder.DATE_DESC;
+    private final SortingOrder sortingOrder = SortingOrder.DATE_DESC;
 
     /**
      * to display while data is charging
@@ -85,33 +85,30 @@ public class EQHomeActivity extends ActionBarActivity
 
         /*if the google play services are not available the framework
         provide a view to the user to update the services*/
-        if (!checkGooglePlayServicesAvailable()) {
+        if (checkGooglePlayServicesAvailable()) {
+            //if fragment exists in the layout that means the app is running on a table
+            fragment =
+                    (EarthQuakeMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
+            if (fragment == null || !fragment.isInLayout()) {
+                Intent intent = new Intent(getApplicationContext(), EQMapActivity.class);
+                intent.putExtra(EQMapActivity.EARTH_QUAKE, earthQuake);
+                startActivity(intent);
+            } else {
+                fragment.clearMarkers();
+                fragment.setEarthQuakeMarker(earthQuake);
+            }
+        } else {
             displayGooglePlayServicesUnavailableText();
             if (fragment == null || !fragment.isInLayout()) {
                 Intent intent = new Intent(getApplicationContext(), EQMapActivity.class);
                 startActivity(intent);
-            } else {
-                //if fragment exists in the layout that means the app is running on a table
-                fragment =
-                        (EarthQuakeMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
-                if (fragment == null || !fragment.isInLayout()) {
-                    Intent intent = new Intent(getApplicationContext(), EQMapActivity.class);
-                    intent.putExtra(EQMapActivity.EARTH_QUAKE, earthQuake);
-                    startActivity(intent);
-                } else {
-                    fragment.clearMarkers();
-                    fragment.setEarthQuakeMarker(earthQuake);
-                }
             }
         }
     }
 
     private boolean checkGooglePlayServicesAvailable (){
         int connectionResult = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if ( connectionResult != ConnectionResult.SUCCESS){
-            return false;
-        }
-        return true;
+        return connectionResult == ConnectionResult.SUCCESS;
     }
 
     private void displayGooglePlayServicesUnavailableText(){
@@ -120,7 +117,7 @@ public class EQHomeActivity extends ActionBarActivity
                 .show();
     }
 
-    private IDataAccessor.DataAccessorListener <List<EarthQuake>> mDataAccessorListener =
+    private final IDataAccessor.DataAccessorListener <List<EarthQuake>> mDataAccessorListener =
             new IDataAccessor.DataAccessorListener<List<EarthQuake>>(){
 
                 @Override

@@ -21,7 +21,7 @@ import java.util.List;
 public class EQMapActivity extends ActionBarActivity{
 
     public static final String EARTH_QUAKE = "EARTH_QUAKE";
-    public static final String EARTH_QUAKE_FRAGMENT = "EARTH_QUAKE_FRAGMENT";
+    private static final String EARTH_QUAKE_FRAGMENT = "EARTH_QUAKE_FRAGMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class EQMapActivity extends ActionBarActivity{
             EarthQuakeMapFragment fragment = new EarthQuakeMapFragment();
 
             if ( getIntent().hasExtra(EARTH_QUAKE)){
-                EarthQuake earthQuake = (EarthQuake) getIntent().getExtras().getParcelable(EARTH_QUAKE);
+                EarthQuake earthQuake = getIntent().getExtras().getParcelable(EARTH_QUAKE);
                 Bundle args = new Bundle();
                 args.putParcelable(EarthQuakeMapFragment.EARTH_QUAKE, earthQuake);
                 fragment.setArguments(args);
@@ -82,12 +82,7 @@ public class EQMapActivity extends ActionBarActivity{
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    private IDataAccessor.DataAccessorListener <List<EarthQuake>> mDataAccessorListener =
+    private final IDataAccessor.DataAccessorListener <List<EarthQuake>> mDataAccessorListener =
             new IDataAccessor.DataAccessorListener<List<EarthQuake>>(){
 
                 @Override
