@@ -9,18 +9,12 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.laurietrichet.earthquake.R;
 import com.laurietrichet.earthquake.adapters.EarthQuakeListAdapter;
-import com.laurietrichet.earthquake.data.DataAccessors;
-import com.laurietrichet.earthquake.data.IDataAccessor;
 import com.laurietrichet.earthquake.model.EarthQuake;
 
 import java.util.List;
-
-import static com.laurietrichet.earthquake.data.DataAccessors.EARTH_QUAKE_DATA_ACCESSOR_KEY;
 
 /**
  * A fragment representing a list of Items.
@@ -47,25 +41,15 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
     private EarthQuakeListAdapter mAdapter;
 
     /**
-     * to display while data is charging
-     */
-    private ProgressBar mProgressBar;
-
-    /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public ItemFragment() {
     }
 
-    private enum Status {UNLOADED,LOADED};
-
-    private Status mLoadingStatus;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLoadingStatus = Status.UNLOADED;
         mAdapter = new EarthQuakeListAdapter(getActivity());
     }
 
@@ -73,8 +57,6 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item, container, false);
-
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
         // Set the adapter
         /*
@@ -118,9 +100,6 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
     @Override
     public void onResume() {
         super.onResume();
-        if (mLoadingStatus == Status.UNLOADED){
-            getData();
-        }
     }
 
     @Override
@@ -142,34 +121,13 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
         public void onFragmentInteraction(EarthQuake earthQuake);
     }
 
-    private IDataAccessor.DataAccessorListener <List<EarthQuake>> mDataAccessorListener =
-            new IDataAccessor.DataAccessorListener<List<EarthQuake>>(){
 
-                @Override
-                public void onSuccess(List<EarthQuake> earthQuakeList) {
-                    mProgressBar.setVisibility(View.INVISIBLE);
-                    mAdapter.updateEarthQuakes(earthQuakeList);
-                    mLoadingStatus = Status.LOADED;
-                }
-
-                @Override
-                public void onError(Error error) {
-                    mProgressBar.setVisibility(View.INVISIBLE);
-                    String errorMessage = (error.getLocalizedMessage() == null)?
-                            getString(R.string.item_fragment_data_loading_error):
-                            error.getLocalizedMessage();
-                    showShortToast(errorMessage);
-                }
-            };
-
-    private void getData (){
-        mProgressBar.setVisibility(View.VISIBLE);
-        IDataAccessor dataAccessor = DataAccessors.getAccessor(getActivity(),
-                EARTH_QUAKE_DATA_ACCESSOR_KEY);
-        dataAccessor.getAll(mDataAccessorListener);
+    /**
+     * ask for adapter to reload its data set from the List<EarthQuake> given
+     * @param earthQuakeList
+     */
+    public void updateData (List<EarthQuake> earthQuakeList){
+        mAdapter.updateEarthQuakes(earthQuakeList);
     }
 
-    private void showShortToast (String text){
-        Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
-    }
 }

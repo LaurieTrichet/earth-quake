@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,12 +59,22 @@ public class EarthQuakeParser {
 
     private static List<EarthQuake> parseArray(JSONArray array) throws Exception {
         List <EarthQuake> arrayEarthQuakes = new ArrayList<EarthQuake>();
-        JSONObject jsonEarthQuake = null;
+        JSONObject jsonEarthQuake;
+        EarthQuake earthQuake;
         arrayEarthQuakes.clear();
+        int indexForInsertion = 0;
         for (int jsonArrayIndex = 0 ; jsonArrayIndex < array.length();
              jsonArrayIndex++ ){
             jsonEarthQuake = array.getJSONObject(jsonArrayIndex);
-            arrayEarthQuakes.add(parseObject(jsonEarthQuake));
+            earthQuake = parseObject(jsonEarthQuake);
+            //control for multiple occurrences
+            indexForInsertion = Collections.binarySearch(
+                    arrayEarthQuakes,
+                    earthQuake,
+                    EarthQuake.getEqidComparator());
+            if ( 0 > indexForInsertion){
+                arrayEarthQuakes.add(-indexForInsertion-1, earthQuake);
+            }
         }
         return arrayEarthQuakes;
     }

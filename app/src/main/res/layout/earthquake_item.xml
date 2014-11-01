@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:padding="16dp"
     android:layout_height="match_parent">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="italic"
         android:text="Medium Text"
         android:id="@+id/textViewTimeDate"
         android:layout_gravity="right" />
@@ -17,20 +19,26 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
+        android:layout_below="@id/textViewTimeDate"
+        android:layout_marginTop="10dp"
         android:id="@+id/textViewRegion" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Medium Text"
-        android:id="@+id/textViewMagnitude"
-        android:layout_gravity="right" />
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/textViewRegion"
+        android:id="@+id/textViewMagnitude"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Medium Text"
+        android:layout_alignBaseline="@id/textViewMagnitude"
+        android:layout_alignParentRight="true"
+        android:textAlignment="center"
         android:id="@+id/textViewDepth" />
-</LinearLayout>
+</RelativeLayout>

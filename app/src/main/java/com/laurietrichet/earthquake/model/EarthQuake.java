@@ -6,12 +6,13 @@ import android.os.Parcelable;
 import com.laurietrichet.earthquake.net.VolleyHelper;
 
 import java.text.ParseException;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
  * Created by laurie on 26/10/2014.
  */
-public class EarthQuake implements Parcelable{
+public class EarthQuake implements Parcelable, Comparable <EarthQuake>{
 
     private String src;
     private String eqid ;
@@ -76,6 +77,37 @@ public class EarthQuake implements Parcelable{
         magnitude = builder.magnitude;
         depth = builder.depth;
         region = builder.region;
+    }
+
+    @Override
+    public int compareTo(EarthQuake another) {
+        return Double.compare(this.magnitude, another.magnitude);
+    }
+
+    private static Comparator <EarthQuake> mDateComparator = new Comparator<EarthQuake>() {
+        @Override
+        public int compare(EarthQuake lhs, EarthQuake rhs) {
+            return (lhs.timedate.compareTo(rhs.timedate));
+        }
+    };
+
+    private static Comparator <EarthQuake> mEqidComparator = new Comparator<EarthQuake>() {
+        @Override
+        public int compare(EarthQuake lhs, EarthQuake rhs) {
+            return (lhs.eqid.compareTo(rhs.eqid));
+        }
+    };
+
+    public static Comparator<EarthQuake> getEqidComparator() {
+        return mEqidComparator;
+    }
+
+    /**
+     * Return a comparator to sort a List <EarthQuake>
+     * @return Comparator<EarthQuake>
+     */
+    public static Comparator<EarthQuake> getDateComparator() {
+        return mDateComparator;
     }
 
     /**
@@ -168,6 +200,14 @@ public class EarthQuake implements Parcelable{
 
     public String getRegion() {
         return region;
+    }
+
+    /**
+     *
+     * @return formatted datetime
+     */
+    public String getTimedateStr() {
+        return VolleyHelper.getDateFormat().format(timedate);
     }
 
     @Override

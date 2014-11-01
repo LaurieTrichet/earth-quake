@@ -76,8 +76,8 @@ public class EarthQuakeListAdapter extends BaseAdapter{
         }
 
         holder.date.setText(VolleyHelper.getDateFormat().format(earthQuake.getTimedate()));
-        holder.magnitude.setText(""+earthQuake.getMagnitude());
-        holder.depth.setText(""+earthQuake.getDepth());
+        holder.magnitude.setText("Magnitude : "+earthQuake.getMagnitude());
+        holder.depth.setText("Depth : "+earthQuake.getDepth());
         holder.region.setText(earthQuake.getRegion());
 
         convertView.setTag(holder);

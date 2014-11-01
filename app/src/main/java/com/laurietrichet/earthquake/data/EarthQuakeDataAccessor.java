@@ -15,9 +15,6 @@ import static com.laurietrichet.earthquake.net.client.IWebServiceClient.WebServi
  */
 public class EarthQuakeDataAccessor implements IDataAccessor {
 
-    public static final String EARTHQUAKES = "earthquakes";
-    public static final String ERROR = "error";
-
     private Context mContext;
 
     private DataAccessorListener <List<EarthQuake>> mDataAccessorListener;

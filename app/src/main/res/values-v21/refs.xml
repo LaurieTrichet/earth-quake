@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="progress_bar_style" type="style">@android:style/Widget.Material.Light.ProgressBar.Large</item>
+</resources>
