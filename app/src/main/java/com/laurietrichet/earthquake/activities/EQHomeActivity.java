@@ -127,8 +127,9 @@ public class EQHomeActivity extends ActionBarActivity
                     ItemFragment itemFragment = (ItemFragment)
                             getSupportFragmentManager().findFragmentById(R.id.listFragment);
                     earthQuakeList= sort(sortingOrder, earthQuakeList);
-                    itemFragment.updateData(earthQuakeList);
-
+                    if (itemFragment != null){
+                        itemFragment.updateData(earthQuakeList);
+                    }
                 }
 
                 @Override
