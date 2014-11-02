@@ -6,6 +6,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonRequest;
 import com.laurietrichet.earthquake.model.EarthQuake;
+import com.laurietrichet.earthquake.net.client.IWebServiceClient;
 import com.laurietrichet.earthquake.net.parsers.EarthQuakeParser;
 
 import org.json.JSONException;
@@ -13,27 +14,33 @@ import org.json.JSONException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import static com.android.volley.Response.ErrorListener;
 import static com.android.volley.Response.error;
 import static com.android.volley.Response.success;
 
 /**
  * Subclass of JsonRequest to call earth quake webservice and get a list of EarthQuake objects
  */
-public class EarthQuakeRequest extends JsonRequest <List<EarthQuake>>{
+public class ListEarthQuakeRequest extends JsonRequest <List<EarthQuake>>{
+
+    private static final String URL_EARTHQUAKE = "http://www.seismi.org/api/eqs/";
 
     /**
      * Construct a request to be pushed in the Volley request queue for processing
-     * @param method GET, POST, PUT, DELETE
-     * @param url url of the web service to reach
-     * @param requestBody body for POST, PUT methods
      * @param listener will be called when the request has successfully finished
-     * @param errorListener will be called when the request has failed
      */
-    public EarthQuakeRequest(int method, String url, String requestBody,
-                             Response.Listener<List<EarthQuake>> listener,
-                             ErrorListener errorListener) {
-        super(method, url, requestBody, listener, errorListener);
+    public ListEarthQuakeRequest(final IWebServiceClient.WebServiceClientListener listener) {
+
+        super(Method.GET, URL_EARTHQUAKE, null, new Response.Listener<List<EarthQuake>>() {
+            @Override
+            public void onResponse(List<EarthQuake> earthQuakes) {
+                listener.onSuccess(earthQuakes);
+            }
+        }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError volleyError) {
+                    listener.onError(new Error(volleyError.getLocalizedMessage()));
+                }
+            });
     }
 
     @Override

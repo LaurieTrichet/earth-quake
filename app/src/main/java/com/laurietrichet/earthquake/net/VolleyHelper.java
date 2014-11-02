@@ -2,9 +2,9 @@ package com.laurietrichet.earthquake.net;
 
 import android.content.Context;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.laurietrichet.earthquake.net.requests.EarthQuakeRequest;
 
 /**
  * Singleton to wrap {@link com.android.volley.toolbox.Volley} library
@@ -19,10 +19,11 @@ public enum  VolleyHelper {
      * Initialize and return the {@link com.android.volley.RequestQueue} to add volley request
      * @param context requested from the volley library
      * @param request request to add to the queue
+     * @return the request given in parameter see method add {@link com.android.volley.RequestQueue}
      */
-    public void addToRequestQueue(Context context,EarthQuakeRequest request) {
+    public Request addToRequestQueue(Context context,Request request) {
         checkInit (context);
-        mRequestQueue.add(request);
+        return mRequestQueue.add(request);
     }
 
     private void checkInit (Context context){

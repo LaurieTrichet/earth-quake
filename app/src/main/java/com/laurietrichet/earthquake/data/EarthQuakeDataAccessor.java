@@ -3,60 +3,38 @@ package com.laurietrichet.earthquake.data;
 import android.content.Context;
 
 import com.laurietrichet.earthquake.model.EarthQuake;
+import com.laurietrichet.earthquake.net.client.AbstractWebServiceClient;
 import com.laurietrichet.earthquake.net.client.EQWebServiceClient;
-import com.laurietrichet.earthquake.net.client.IWebServiceClient;
 
 import java.util.List;
 
-import static com.laurietrichet.earthquake.net.client.IWebServiceClient.WebServiceClientListener;
+import static com.laurietrichet.earthquake.net.client.AbstractWebServiceClient.WebServiceClientListener;
 
 /**
  * Implementation of {@link com.laurietrichet.earthquake.data.IDataAccessor} for EarthQuake object
  */
 public class EarthQuakeDataAccessor implements IDataAccessor {
 
-    private final Context mContext;
-
-    private DataAccessorListener <List<EarthQuake>> mDataAccessorListener;
-
-    private IWebServiceClient mClient ;
-
-    private final WebServiceClientListener <List<EarthQuake>> mListener =
-            new WebServiceClientListener<List<EarthQuake>>() {
-        @Override
-        public void onSuccess(List<EarthQuake> obj) {
-            mDataAccessorListener.onSuccess(obj);
-        }
-
-        @Override
-        public void onError(Error error) {
-            mDataAccessorListener.onError(error);
-        }
-    };
+    private AbstractWebServiceClient mClient ;
 
     /**package*/ EarthQuakeDataAccessor (Context context) {
-        mContext = context.getApplicationContext();
+        mClient = new EQWebServiceClient(context.getApplicationContext());
     }
 
     @Override
-    public void getAll (DataAccessorListener listener){
+    public void getAll (final DataAccessorListener dataAccessorListener){
+        WebServiceClientListener <List<EarthQuake>> webServiceClientListener =
+                new WebServiceClientListener<List<EarthQuake>>() {
+                    @Override
+                    public void onSuccess(List<EarthQuake> obj) {
+                        dataAccessorListener.onSuccess(obj);
+                    }
 
-        mClient = new EQWebServiceClient(mContext);
-        mDataAccessorListener = listener;
-        mClient.get(mListener);
-        /*
-        InputStream stream = null;
-        try {
-            stream = mContext.getAssets().open("eqs.json");
-            String json = FileUtility.file2String(stream);
-            listener.onSuccess(EarthQuakeParser.parse(json));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
+                    @Override
+                    public void onError(Error error) {
+                        dataAccessorListener.onError(error);
+                    }
+                };
+        mClient.get(EQWebServiceClient.ENTRY_POINT_LIST_EQ, null, webServiceClientListener);
     }
 }

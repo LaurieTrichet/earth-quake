@@ -1,13 +1,12 @@
 package com.laurietrichet.earthquake.net.client;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.laurietrichet.earthquake.model.EarthQuake;
-import com.laurietrichet.earthquake.net.requests.EarthQuakeRequest;
 import com.laurietrichet.earthquake.net.VolleyHelper;
+import com.laurietrichet.earthquake.net.requests.ListEarthQuakeRequest;
 
 import java.util.List;
 
@@ -15,36 +14,28 @@ import java.util.List;
  * IWebServiceClient implementation to get {@link com.laurietrichet.earthquake.model.EarthQuake} objects.
  * Use {@link com.android.volley.toolbox.Volley} library
  */
-public class EQWebServiceClient implements IWebServiceClient {
-
-    private static final String URL_EARTHQUAKE = "http://www.seismi.org/api/eqs/";
+public class EQWebServiceClient extends AbstractWebServiceClient<List<EarthQuake>> {
 
     private final Context mContext;
+
+    public static final String ENTRY_POINT_LIST_EQ = "ENTRY_POINT_LIST_EQ";
 
     public EQWebServiceClient(Context context){
         mContext = context;
     }
 
     @Override
-    public void get(final WebServiceClientListener listener) {
+    protected Request createRequest(final String entryPoint,
+                                    final Bundle params,
+                                    final WebServiceClientListener listener) {
+        if (entryPoint.equals(ENTRY_POINT_LIST_EQ)){
+            return new ListEarthQuakeRequest( listener);
+        }
+        return null;
+    }
 
-        Response.Listener <List<EarthQuake>> mListener = new Response.Listener<List<EarthQuake>>() {
-            @Override
-            public void onResponse(List<EarthQuake> earthQuakes) {
-                listener.onSuccess(earthQuakes);
-            }
-        };
-
-        Response.ErrorListener mErrorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                listener.onError(new Error(volleyError.getLocalizedMessage()));
-            }
-        };
-
-        EarthQuakeRequest request = new EarthQuakeRequest(Request.Method.GET, URL_EARTHQUAKE, null,
-                mListener, mErrorListener);
-
-        VolleyHelper.INSTANCE.addToRequestQueue(mContext, request);
+    @Override
+    protected int send (Request request){
+        return (request == VolleyHelper.INSTANCE.addToRequestQueue(mContext, request))? 0 : -1;
     }
 }
