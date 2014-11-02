@@ -3,10 +3,8 @@ package com.laurietrichet.earthquake.test;
 import android.content.res.AssetManager;
 import android.test.InstrumentationTestCase;
 
-import com.laurietrichet.earthquake.FileUtility;
 import com.laurietrichet.earthquake.model.EarthQuake;
 import com.laurietrichet.earthquake.net.parsers.EarthQuakeParser;
-import com.laurietrichet.earthquake.net.VolleyHelper;
 
 import junit.framework.Assert;
 
@@ -55,7 +53,7 @@ public class EarthQuakeParserTest extends InstrumentationTestCase {
 // "magnitude":"4.6","depth":"40.90","region":"Nicobar Islands, India region"}
         Assert.assertTrue(item.getSrc().equals(jsonItem.getString(SRC)));
         Assert.assertTrue(item.getEqid().equals(jsonItem.getString(EQID)));
-        Date dateFromJson = VolleyHelper.getDateFormat().parse(jsonItem.optString(TIMEDATE, null));
+        Date dateFromJson = EarthQuake.getDateFormat().parse(jsonItem.optString(TIMEDATE, null));
         Assert.assertTrue(item.getTimedate().equals(dateFromJson));
         Assert.assertTrue(item.getRegion().equals(jsonItem.getString(REGION)));
         Assert.assertTrue(item.getLat().equals(Float.parseFloat(jsonItem.optString(LAT, null))));
