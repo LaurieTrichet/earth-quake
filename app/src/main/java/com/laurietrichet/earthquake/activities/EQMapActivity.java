@@ -103,7 +103,9 @@ public class EQMapActivity extends ActionBarActivity{
         EarthQuakeMapFragment earthQuakeMapFragment =
                 (EarthQuakeMapFragment) getSupportFragmentManager()
                         .findFragmentByTag(EARTH_QUAKE_FRAGMENT);
-        earthQuakeMapFragment.clearMarkers();
-        earthQuakeMapFragment.setEarthQuakeMarkers(earthQuakeList);
+        if (earthQuakeMapFragment != null){
+            earthQuakeMapFragment.clearMarkers();
+            earthQuakeMapFragment.setEarthQuakeMarkers(earthQuakeList);
+        }
     }
 }

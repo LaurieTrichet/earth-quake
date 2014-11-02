@@ -6,7 +6,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonRequest;
 import com.laurietrichet.earthquake.model.EarthQuake;
-import com.laurietrichet.earthquake.net.client.IWebServiceClient;
 import com.laurietrichet.earthquake.net.parsers.EarthQuakeParser;
 
 import org.json.JSONException;
@@ -16,6 +15,7 @@ import java.util.List;
 
 import static com.android.volley.Response.error;
 import static com.android.volley.Response.success;
+import static com.laurietrichet.earthquake.net.client.AbstractWebServiceClient.WebServiceClientListener;
 
 /**
  * Subclass of JsonRequest to call earth quake webservice and get a list of EarthQuake objects
@@ -28,7 +28,7 @@ public class ListEarthQuakeRequest extends JsonRequest <List<EarthQuake>>{
      * Construct a request to be pushed in the Volley request queue for processing
      * @param listener will be called when the request has successfully finished
      */
-    public ListEarthQuakeRequest(final IWebServiceClient.WebServiceClientListener listener) {
+    public ListEarthQuakeRequest(final WebServiceClientListener listener) {
 
         super(Method.GET, URL_EARTHQUAKE, null, new Response.Listener<List<EarthQuake>>() {
             @Override
