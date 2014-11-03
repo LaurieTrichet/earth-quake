@@ -79,6 +79,7 @@ public class EQHomeActivity extends ActionBarActivity
 
     @Override
     public void onFragmentInteraction(EarthQuake earthQuake) {
+
         EarthQuakeMapFragment fragment =
                 (EarthQuakeMapFragment) getSupportFragmentManager()
                         .findFragmentById(R.id.mapFragment);
@@ -87,8 +88,7 @@ public class EQHomeActivity extends ActionBarActivity
         provide a view to the user to update the services*/
         if (checkGooglePlayServicesAvailable()) {
             //if fragment exists in the layout that means the app is running on a table
-            fragment =
-                    (EarthQuakeMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapFragment);
+
             if (fragment == null || !fragment.isInLayout()) {
                 Intent intent = new Intent(getApplicationContext(), EQMapActivity.class);
                 intent.putExtra(EQMapActivity.EARTH_QUAKE, earthQuake);

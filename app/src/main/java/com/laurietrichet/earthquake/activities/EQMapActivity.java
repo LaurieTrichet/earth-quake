@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -35,22 +36,17 @@ public class EQMapActivity extends ActionBarActivity{
         setContentView(R.layout.activity_map);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        EarthQuakeMapFragment fragment = new EarthQuakeMapFragment();
+        EarthQuakeMapFragment fragment = getMapFragment ();
 
-        if (savedInstanceState == null) {
-            if ( getIntent().hasExtra(EARTH_QUAKE)){
-                EarthQuake earthQuake = getIntent().getExtras().getParcelable(EARTH_QUAKE);
-                Bundle args = new Bundle();
-                args.putParcelable(EarthQuakeMapFragment.EARTH_QUAKE, earthQuake);
-                fragment.setArguments(args);
-            }
+        if ( getIntent().hasExtra(EARTH_QUAKE)){
+            mProgressBar.setVisibility(View.GONE);
+            EarthQuake earthQuake = getIntent().getExtras().getParcelable(EARTH_QUAKE);
+            fragment.setEarthQuakeMarker(earthQuake);
         }
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, fragment, EARTH_QUAKE_FRAGMENT)
-                .commit();
     }
 
     private void getData (){
+        mProgressBar.setVisibility(View.VISIBLE);
         IDataAccessor  dataAccessor =
                 DataAccessors.getAccessor(this, DataAccessors.EARTH_QUAKE_DATA_ACCESSOR_KEY);
         dataAccessor.getAll(mDataAccessorListener);
@@ -86,31 +82,47 @@ public class EQMapActivity extends ActionBarActivity{
         super.onResume();
         if (getIntent().getExtras() == null){
             getData ();
+        } else{
+            mProgressBar.setVisibility(View.GONE);
         }
     }
+
+   /* @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if (getIntent().getExtras() == null){
+            outState.putParcelable(EARTH_QUAKE, getIntent().getExtras().getParcelable());
+        }
+        super.onSaveInstanceState(outState);
+    }*/
 
     private final IDataAccessor.DataAccessorListener <List<EarthQuake>> mDataAccessorListener =
             new IDataAccessor.DataAccessorListener<List<EarthQuake>>(){
 
                 @Override
                 public void onSuccess(List<EarthQuake> earthQuakeList) {
+                    mProgressBar.setVisibility(View.GONE);
                     updateMarkers(earthQuakeList);
                 }
 
                 @Override
                 public void onError(Error error) {
+                    mProgressBar.setVisibility(View.GONE);
                     String errorMessage = getString(R.string.item_fragment_data_loading_error);
                     Toast.makeText(EQMapActivity.this,errorMessage,Toast.LENGTH_SHORT).show();
                 }
             };
 
     private void updateMarkers (List<EarthQuake> earthQuakeList){
-        EarthQuakeMapFragment earthQuakeMapFragment =
-                (EarthQuakeMapFragment) getSupportFragmentManager()
-                        .findFragmentByTag(EARTH_QUAKE_FRAGMENT);
-        if (earthQuakeMapFragment != null){
-            earthQuakeMapFragment.clearMarkers();
-            earthQuakeMapFragment.setEarthQuakeMarkers(earthQuakeList);
+        EarthQuakeMapFragment fragment = getMapFragment ();
+
+        if (fragment != null){
+            fragment.clearMarkers();
+            fragment.setEarthQuakeMarkers(earthQuakeList);
         }
+    }
+
+    private EarthQuakeMapFragment getMapFragment (){
+        return (EarthQuakeMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapFragment);
     }
 }

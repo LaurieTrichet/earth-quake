@@ -47,9 +47,11 @@ public class EarthQuakeMapFragment extends SupportMapFragment {
      */
     public void setEarthQuakeMarker(EarthQuake earthQuake) {
         LatLng latLng = new LatLng(earthQuake.getLat(), earthQuake.getLon());
+        getMap().stopAnimation();
         getMap().addMarker(createMarker(earthQuake));
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLng);
-        getMap().moveCamera(cameraUpdate);
+        //getMap().moveCamera(cameraUpdate);
+        getMap().animateCamera(cameraUpdate);
     }
 
     /**
