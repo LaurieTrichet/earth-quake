@@ -6,8 +6,8 @@
     <string name="action_map">Map view</string>
     <string name="action_loading">Loading</string>
     <string name="earth_quake_map">World wide view</string>
-    <string name="item_fragment_data_loading_error">Earth quakes data have not been charged, please check your internet connection</string>
+    <string name="item_fragment_data_loading_error">Earth quakes data has not been loaded, please check your internet connection.</string>
     <string name="action_view">List view</string>
-    <string name="google_play_sevices_not_available">Map is not available on your device, please check Google play for updates</string>
+    <string name="google_play_sevices_not_available">Map is not available on your device, please check Google Play for updates.</string>
 
 </resources>
