@@ -24,6 +24,7 @@ Software Patterns
 Singleton: The singleton allows the access of data through the application. The singleton object is kept in memory during the application's lifetime.
 Enum Singleton : The enum singleton thread safety and serialization is guaranteed by the JVM.
 Builder : Because the earthquake object has more than 4 members, it is preferable to use a builder for readability.
+Factory : Provide an abstraction level between the backend and the frontend.
 
 Software design
 ---------------
