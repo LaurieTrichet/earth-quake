@@ -1,11 +1,13 @@
 package com.laurietrichet.earthquake.net.requests;
 
+import com.android.volley.Cache;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonRequest;
 import com.laurietrichet.earthquake.model.EarthQuake;
+import com.laurietrichet.earthquake.net.VolleyHelper;
 import com.laurietrichet.earthquake.net.parsers.EarthQuakeParser;
 
 import org.json.JSONException;
@@ -38,9 +40,24 @@ public class ListEarthQuakeRequest extends JsonRequest <List<EarthQuake>>{
         }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError volleyError) {
-                    listener.onError(new Error(volleyError.getLocalizedMessage()));
+                    Cache.Entry entry = VolleyHelper.INSTANCE.getCache().get(URL_EARTHQUAKE);
+                    if (entry != null){
+                        List<EarthQuake> arrayEarthQuake;
+                        try {
+                            arrayEarthQuake = EarthQuakeParser.parse(
+                                    new String(entry.data,
+                                            HttpHeaderParser.parseCharset(entry.responseHeaders)));
+                            listener.onSuccess(arrayEarthQuake);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            listener.onError(new Error(volleyError.getLocalizedMessage()));
+                        }
+                    } else {
+                        listener.onError(new Error(volleyError.getLocalizedMessage()));
+                    }
                 }
             });
+        this.setShouldCache(true);
     }
 
     @Override
@@ -65,8 +82,8 @@ public class ListEarthQuakeRequest extends JsonRequest <List<EarthQuake>>{
             return error(new VolleyError(e));
         }
 
+        //Ignore no-cache cache directive because we want the apps runs online
         return success(arrayEarthQuake,
-                HttpHeaderParser.parseCacheHeaders(networkResponse));
+                VolleyHelper.parseCacheHeaders(networkResponse));
     }
-
 }
