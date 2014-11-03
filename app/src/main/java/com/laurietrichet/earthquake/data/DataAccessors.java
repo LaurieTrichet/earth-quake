@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Utility class to manage data
  * Controls the data accessors's creation.
  * See {@link com.laurietrichet.earthquake.data.IDataAccessor} to know how access to data.
  */

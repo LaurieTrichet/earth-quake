@@ -34,7 +34,7 @@ public class EQWebServiceClientTest extends InstrumentationTestCase {
                 Assert.assertNull(error);
             }
         };
-        mWebServiceClient = new EQWebServiceClient(getInstrumentation().getContext());
+        mWebServiceClient = new EQWebServiceClient(getInstrumentation().getTargetContext());
         Assert.assertEquals(0,
                 mWebServiceClient.get(EQWebServiceClient.ENTRY_POINT_LIST_EQ,null,mListener));
     }

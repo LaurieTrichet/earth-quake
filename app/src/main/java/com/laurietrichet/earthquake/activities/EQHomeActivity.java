@@ -135,9 +135,7 @@ public class EQHomeActivity extends ActionBarActivity
                 @Override
                 public void onError(Error error) {
                     mProgressBar.setVisibility(View.INVISIBLE);
-                    String errorMessage = (error.getLocalizedMessage() == null)?
-                            getString(R.string.item_fragment_data_loading_error):
-                            error.getLocalizedMessage();
+                    String errorMessage = getString(R.string.item_fragment_data_loading_error);
                     Toast.makeText(EQHomeActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                 }
             };

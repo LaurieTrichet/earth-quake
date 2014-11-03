@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.laurietrichet.earthquake.R;
@@ -23,24 +24,30 @@ public class EQMapActivity extends ActionBarActivity{
     public static final String EARTH_QUAKE = "EARTH_QUAKE";
     private static final String EARTH_QUAKE_FRAGMENT = "EARTH_QUAKE_FRAGMENT";
 
+    /**
+     * to display while data is charging
+     */
+    private ProgressBar mProgressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        if (savedInstanceState == null) {
-            EarthQuakeMapFragment fragment = new EarthQuakeMapFragment();
 
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        EarthQuakeMapFragment fragment = new EarthQuakeMapFragment();
+
+        if (savedInstanceState == null) {
             if ( getIntent().hasExtra(EARTH_QUAKE)){
                 EarthQuake earthQuake = getIntent().getExtras().getParcelable(EARTH_QUAKE);
                 Bundle args = new Bundle();
                 args.putParcelable(EarthQuakeMapFragment.EARTH_QUAKE, earthQuake);
                 fragment.setArguments(args);
             }
-
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, fragment, EARTH_QUAKE_FRAGMENT)
-                    .commit();
         }
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, fragment, EARTH_QUAKE_FRAGMENT)
+                .commit();
     }
 
     private void getData (){
@@ -92,9 +99,7 @@ public class EQMapActivity extends ActionBarActivity{
 
                 @Override
                 public void onError(Error error) {
-                    String errorMessage = (error.getLocalizedMessage() == null)?
-                            getString(R.string.item_fragment_data_loading_error):
-                            error.getLocalizedMessage();
+                    String errorMessage = getString(R.string.item_fragment_data_loading_error);
                     Toast.makeText(EQMapActivity.this,errorMessage,Toast.LENGTH_SHORT).show();
                 }
             };
