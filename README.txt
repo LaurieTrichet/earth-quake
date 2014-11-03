@@ -10,6 +10,7 @@ compatibility : API 10 to API 21
 Instructions
 ------------
 If you want to run the project on your computer, and test the debug apk, you have to replace to the Google map api key.
+The app-release.apk is a signed app so it can be used to test.
 
 Dependencies
 -------------
@@ -47,6 +48,7 @@ When user selects an item from the list, the data is displayed on a map.
 A button is available in the action bar to switch to map or list view.
 If a network error occurred a message is displayed to the user inviting him to check his network settings,
 but a better way of doing this would be to launch the setting activity.
+On the map view, markers are not customized, but a good addition would be to design a proper marker view.
 
 Conception
 -----------
