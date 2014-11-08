@@ -1,4 +1,4 @@
-package com.laurietrichet.earthquake.test;
+package com.laurietrichet.earthquake;
 
 import java.io.BufferedReader;
 import java.io.IOException;

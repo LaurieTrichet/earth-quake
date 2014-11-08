@@ -1,10 +1,10 @@
-package com.laurietrichet.earthquake.test;
+package com.laurietrichet.earthquake.net.parsers;
 
 import android.content.res.AssetManager;
 import android.test.InstrumentationTestCase;
 
+import com.laurietrichet.earthquake.FileUtility;
 import com.laurietrichet.earthquake.model.EarthQuake;
-import com.laurietrichet.earthquake.net.parsers.EarthQuakeParser;
 
 import junit.framework.Assert;
 
