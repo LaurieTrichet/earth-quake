@@ -35,7 +35,7 @@ public class EQMapActivity extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         EarthQuakeMapFragment fragment = getMapFragment ();
 
         if ( getIntent().hasExtra(EARTH_QUAKE)){
@@ -123,6 +123,6 @@ public class EQMapActivity extends ActionBarActivity{
 
     private EarthQuakeMapFragment getMapFragment (){
         return (EarthQuakeMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.mapFragment);
+                .findFragmentById(R.id.map_fragment);
     }
 }

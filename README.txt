@@ -15,9 +15,10 @@ The app-release.apk is a signed app so it can be used to test.
 Dependencies
 -------------
 
-- Volley
+- Volley (online doc : http://afzaln.com/volley/)
 - Android support v4
 - Android support v7
+- https://github.com/JakeWharton/double-espresso gradle port of espresso
 
 Software Patterns
 -----------------

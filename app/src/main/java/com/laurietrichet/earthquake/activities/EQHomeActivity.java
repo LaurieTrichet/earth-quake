@@ -35,12 +35,15 @@ public class EQHomeActivity extends ActionBarActivity
      * to display while data is charging
      */
     private ProgressBar mProgressBar;
+    public ProgressBar getProgressBar() {
+        return mProgressBar;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
     }
 
     @Override
@@ -65,7 +68,6 @@ public class EQHomeActivity extends ActionBarActivity
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(intent);
             return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -73,7 +75,6 @@ public class EQHomeActivity extends ActionBarActivity
     @Override
     protected void onResume() {
         super.onResume();
-        mProgressBar.setVisibility(View.VISIBLE);
         getData();
     }
 
@@ -82,7 +83,7 @@ public class EQHomeActivity extends ActionBarActivity
 
         EarthQuakeMapFragment fragment =
                 (EarthQuakeMapFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.mapFragment);
+                        .findFragmentById(R.id.map_fragment);
 
         /*if the google play services are not available the framework
         provide a view to the user to update the services*/
@@ -125,7 +126,7 @@ public class EQHomeActivity extends ActionBarActivity
                     mProgressBar.setVisibility(View.INVISIBLE);
                     mProgressBar.setVisibility(View.GONE);
                     ItemFragment itemFragment = (ItemFragment)
-                            getSupportFragmentManager().findFragmentById(R.id.listFragment);
+                            getSupportFragmentManager().findFragmentById(R.id.list_fragment);
                     earthQuakeList= sort(sortingOrder, earthQuakeList);
                     if (itemFragment != null){
                         itemFragment.updateData(earthQuakeList);

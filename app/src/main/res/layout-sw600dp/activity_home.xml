@@ -9,19 +9,19 @@
         style="R.id.progress_bar_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
+        android:id="@+id/progress_bar"
         android:layout_alignParentTop="true"
         android:layout_gravity="center"/>
 
     <fragment
-        android:id="@+id/listFragment"
+        android:id="@+id/list_fragment"
         android:layout_width="0dp"
         android:layout_weight="2"
         android:layout_height="match_parent"
         class="com.laurietrichet.earthquake.fragments.ItemFragment" />
 
     <fragment
-        android:id="@+id/mapFragment"
+        android:id="@+id/map_fragment"
         android:layout_width="0dp"
         android:layout_weight="2"
         android:layout_height="match_parent"
