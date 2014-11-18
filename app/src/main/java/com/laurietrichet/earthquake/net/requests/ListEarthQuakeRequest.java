@@ -1,6 +1,5 @@
 package com.laurietrichet.earthquake.net.requests;
 
-import com.android.volley.Cache;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -23,8 +22,9 @@ import static com.laurietrichet.earthquake.net.client.AbstractWebServiceClient.W
  * Subclass of JsonRequest to call earth quake webservice and get a list of EarthQuake objects
  */
 public class ListEarthQuakeRequest extends JsonRequest <List<EarthQuake>>{
+    private final static String TAG = ListEarthQuakeRequest.class.getName();
 
-    private static final String URL_EARTHQUAKE = "http://www.seismi.org/api/eqs/";
+    static final String URL_EARTHQUAKE = "http://www.seismi.org/api/eqs/";
 
     /**
      * Construct a request to be pushed in the Volley request queue for processing
@@ -37,26 +37,7 @@ public class ListEarthQuakeRequest extends JsonRequest <List<EarthQuake>>{
             public void onResponse(List<EarthQuake> earthQuakes) {
                 listener.onSuccess(earthQuakes);
             }
-        }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError volleyError) {
-                    Cache.Entry entry = VolleyHelper.INSTANCE.getCache().get(URL_EARTHQUAKE);
-                    if (entry != null){
-                        List<EarthQuake> arrayEarthQuake;
-                        try {
-                            arrayEarthQuake = EarthQuakeParser.parse(
-                                    new String(entry.data,
-                                            HttpHeaderParser.parseCharset(entry.responseHeaders)));
-                            listener.onSuccess(arrayEarthQuake);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            listener.onError(new Error(volleyError.getLocalizedMessage()));
-                        }
-                    } else {
-                        listener.onError(new Error(volleyError.getLocalizedMessage()));
-                    }
-                }
-            });
+        }, new ListEarthQuakeErrorListener(listener));
         this.setShouldCache(true);
     }
 
@@ -67,14 +48,11 @@ public class ListEarthQuakeRequest extends JsonRequest <List<EarthQuake>>{
         try {
             jsonString = new String (networkResponse.data,
                     HttpHeaderParser.parseCharset(networkResponse.headers));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return error(new VolleyError(e));
-        }
-
-        try {
             arrayEarthQuake = EarthQuakeParser.parse(jsonString);
         } catch (JSONException e) {
+            e.printStackTrace();
+            return error(new VolleyError(e));
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return error(new VolleyError(e));
         } catch (Exception e) {

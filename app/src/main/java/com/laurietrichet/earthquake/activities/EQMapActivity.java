@@ -17,6 +17,9 @@ import com.laurietrichet.earthquake.model.EarthQuake;
 
 import java.util.List;
 
+import static com.laurietrichet.earthquake.activities.utilities.GooglePlayServiceUtility.checkGooglePlayServicesAvailable;
+import static com.laurietrichet.earthquake.data.DataAccessors.DATA_ACCESSORS_ENUM;
+
 /**
  * Display the earth quakes on a map
  */
@@ -36,10 +39,12 @@ public class EQMapActivity extends ActionBarActivity{
         setContentView(R.layout.activity_map);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        mProgressBar.setVisibility(View.GONE);
+
         EarthQuakeMapFragment fragment = getMapFragment ();
 
-        if ( getIntent().hasExtra(EARTH_QUAKE)){
-            mProgressBar.setVisibility(View.GONE);
+        if (!checkGooglePlayServicesAvailable(this)) return;
+        if (getIntent().hasExtra(EARTH_QUAKE)){
             EarthQuake earthQuake = getIntent().getExtras().getParcelable(EARTH_QUAKE);
             fragment.setEarthQuakeMarker(earthQuake);
         }
@@ -48,7 +53,8 @@ public class EQMapActivity extends ActionBarActivity{
     private void getData (){
         mProgressBar.setVisibility(View.VISIBLE);
         IDataAccessor  dataAccessor =
-                DataAccessors.getAccessor(this, DataAccessors.EARTH_QUAKE_DATA_ACCESSOR_KEY);
+                DataAccessors.getAccessor(this,
+                        DATA_ACCESSORS_ENUM.EARTH_QUAKE_DATA_ACCESSOR);
         dataAccessor.getAll(mDataAccessorListener);
     }
 
@@ -80,6 +86,8 @@ public class EQMapActivity extends ActionBarActivity{
     @Override
     protected void onResume() {
         super.onResume();
+        if (!checkGooglePlayServicesAvailable(this)) return;
+
         if (getIntent().getExtras() == null){
             getData ();
         } else{

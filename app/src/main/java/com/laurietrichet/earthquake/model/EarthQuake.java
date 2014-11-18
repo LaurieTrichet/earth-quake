@@ -32,7 +32,9 @@ public class EarthQuake implements Parcelable, Comparable <EarthQuake>{
 
     private static final SimpleDateFormat mDateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.US);
 
-    private EarthQuake(){}
+    private EarthQuake() throws UnsupportedOperationException{
+        throw new UnsupportedOperationException("Forbidden Constructor");
+    }
 
     private EarthQuake(Parcel in) {
         src = in.readString();
@@ -59,8 +61,8 @@ public class EarthQuake implements Parcelable, Comparable <EarthQuake>{
         dest.writeString(src);
         dest.writeString(eqid);
         dest.writeString(getDateFormat().format(timedate));
-        dest.writeString("" +lat);
-        dest.writeString("" +lon);
+        dest.writeString(String.valueOf(lat));
+        dest.writeString(String.valueOf(lon));
         dest.writeDouble(magnitude);
         dest.writeDouble(depth);
         dest.writeString(region);
@@ -90,34 +92,22 @@ public class EarthQuake implements Parcelable, Comparable <EarthQuake>{
 
     @Override
     public int compareTo(@NonNull EarthQuake another) {
-        return Double.compare(this.magnitude, another.magnitude);
+        return (this.eqid.compareTo(another.eqid));
     }
 
-    private final static Comparator <EarthQuake>  mDateComparator = new Comparator<EarthQuake>() {
+    public final static Comparator <EarthQuake> DATE_COMPARATOR = new Comparator<EarthQuake>() {
         @Override
         public int compare(final EarthQuake lhs, final EarthQuake rhs) {
             return (lhs.timedate.compareTo(rhs.timedate));
         }
     };
 
-    private final static Comparator <EarthQuake> mEqidComparator = new Comparator<EarthQuake>() {
+    public final static Comparator <EarthQuake> MAGNITUDE_COMPARATOR = new Comparator<EarthQuake>() {
         @Override
         public int compare(EarthQuake lhs, EarthQuake rhs) {
-            return (lhs.eqid.compareTo(rhs.eqid));
+            return Double.compare(lhs.magnitude, rhs.magnitude);
         }
     };
-
-    public static Comparator<EarthQuake> getEqidComparator() {
-        return mEqidComparator;
-    }
-
-    /**
-     * Return a comparator to sort a List <EarthQuake>
-     * @return Comparator<EarthQuake>
-     */
-    public static Comparator<EarthQuake> getDateComparator() {
-        return mDateComparator;
-    }
 
     /**
      * Builder class used to create a EarthQuake object
@@ -229,5 +219,22 @@ public class EarthQuake implements Parcelable, Comparable <EarthQuake>{
                 " magnitude : " + magnitude +
                 " depth : " + depth +
                 " region : " + region;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (! (o instanceof EarthQuake)){
+            return false;
+        }
+        EarthQuake earthQuake = (EarthQuake) o;
+        if ( earthQuake == this) return true;
+        return (eqid == null)? earthQuake.eqid == null : earthQuake.eqid.equals(this.eqid) ;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + eqid.hashCode();
+        return result;
     }
 }

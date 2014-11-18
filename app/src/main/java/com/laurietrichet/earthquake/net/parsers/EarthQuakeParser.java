@@ -6,24 +6,25 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.TreeSet;
 
 /**
  * Parser for EarthQuake object using {@link org.json.JSONObject}
  */
 public class EarthQuakeParser {
 
-    public static final String SRC = "src";
-    public static final String EQID = "eqid";
-    public static final String TIMEDATE = "timedate";
-    public static final String LAT = "lat";
-    public static final String LON = "lon";
-    public static final String MAGNITUDE = "magnitude";
-    public static final String DEPTH = "depth";
-    public static final String REGION = "region";
-
-    public static final String EARTHQUAKES = "earthquakes";
+    enum EQFields {
+        src,
+        eqid,
+        timedate,
+        lat,
+        lon,
+        magnitude,
+        depth,
+        region,
+        earthquakes
+    }
 
     private EarthQuakeParser () {}
 
@@ -36,43 +37,36 @@ public class EarthQuakeParser {
      */
     public static List <EarthQuake> parse (String jsonString) throws Exception{
         JSONObject jsonResponse = new JSONObject(jsonString);
-        JSONArray jsonArrayEarthQuakes = jsonResponse.getJSONArray(EARTHQUAKES);
+        JSONArray jsonArrayEarthQuakes = jsonResponse.getJSONArray(EQFields.earthquakes.name());
         return parseArray(jsonArrayEarthQuakes);
     }
 
     private static EarthQuake parseObject (JSONObject obj) throws Exception{
         EarthQuake.Builder builder = new EarthQuake.Builder();
-        builder.src(obj.optString(SRC, null))
-        .eqid (obj.optString(EQID, null))
-        .timedate( EarthQuake.getDateFormat().parse( obj.optString(TIMEDATE, null)))
-        .lat ( Float.parseFloat(obj.optString(LAT, null)))
-        .lon ( Float.parseFloat(obj.optString(LON, null)))
-        .magnitude ( obj.optDouble(MAGNITUDE, 0.d))
-        .depth ( obj.optDouble(DEPTH, 0.d))
-        .region ( obj.optString(REGION, null));
+        builder.src(obj.optString(EQFields.src.name(), null))
+        .eqid (obj.optString(EQFields.eqid.name(), null))
+        .timedate( EarthQuake.getDateFormat().parse( obj.optString(EQFields.timedate.name(), null)))
+        .lat ( Float.parseFloat(obj.optString(EQFields.lat.name(), null)))
+        .lon ( Float.parseFloat(obj.optString(EQFields.lon.name(), null)))
+        .magnitude ( obj.optDouble(EQFields.magnitude.name(), 0.d))
+        .depth ( obj.optDouble(EQFields.depth.name(), 0.d))
+        .region ( obj.optString(EQFields.region.name(), null));
 
         return builder.build();
     }
 
     private static List<EarthQuake> parseArray(JSONArray array) throws Exception {
-        List <EarthQuake> arrayEarthQuakes = new ArrayList<EarthQuake>();
+        List <EarthQuake> arrayEarthQuakes;
+        TreeSet<EarthQuake> earthQuakeTreeSet = new TreeSet<EarthQuake>();
         JSONObject jsonEarthQuake;
         EarthQuake earthQuake;
-        int indexForInsertion;
 
         for (int jsonArrayIndex = 0 ; jsonArrayIndex < array.length();jsonArrayIndex++ ){
             jsonEarthQuake = array.getJSONObject(jsonArrayIndex);
             earthQuake = parseObject(jsonEarthQuake);
-
-            //control for multiple occurrences
-            indexForInsertion = Collections.binarySearch(
-                    arrayEarthQuakes,
-                    earthQuake,
-                    EarthQuake.getEqidComparator());
-            if ( 0 > indexForInsertion){
-                arrayEarthQuakes.add(-indexForInsertion-1, earthQuake);
-            }
+            earthQuakeTreeSet.add(earthQuake);
         }
+        arrayEarthQuakes = new ArrayList<EarthQuake>(earthQuakeTreeSet);
         return arrayEarthQuakes;
     }
 }

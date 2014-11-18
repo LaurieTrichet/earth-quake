@@ -9,27 +9,26 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.laurietrichet.earthquake.R;
 import com.laurietrichet.earthquake.data.DataAccessors;
 import com.laurietrichet.earthquake.data.IDataAccessor;
 import com.laurietrichet.earthquake.fragments.EarthQuakeMapFragment;
 import com.laurietrichet.earthquake.fragments.ItemFragment;
 import com.laurietrichet.earthquake.model.EarthQuake;
+import com.laurietrichet.earthquake.model.EarthQuakeUtility;
 
-import java.util.Collections;
 import java.util.List;
 
-import static com.laurietrichet.earthquake.data.DataAccessors.EARTH_QUAKE_DATA_ACCESSOR_KEY;
+import static com.laurietrichet.earthquake.activities.utilities.GooglePlayServiceUtility.checkGooglePlayServicesAvailable;
+import static com.laurietrichet.earthquake.activities.utilities.GooglePlayServiceUtility.displayGooglePlayServicesUnavailableText;
+import static com.laurietrichet.earthquake.data.DataAccessors.DATA_ACCESSORS_ENUM;
+import static com.laurietrichet.earthquake.model.EarthQuakeUtility.SORTING_ORDER;
 
 
 public class EQHomeActivity extends ActionBarActivity
         implements ItemFragment.OnFragmentInteractionListener {
 
-    private enum SortingOrder {DATE_DESC, MAG_DESC}
-
-    private final SortingOrder sortingOrder = SortingOrder.DATE_DESC;
+    private SORTING_ORDER mSortingOrder;
 
     /**
      * to display while data is charging
@@ -43,6 +42,7 @@ public class EQHomeActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        mSortingOrder = SORTING_ORDER.DATE;
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
     }
 
@@ -55,13 +55,10 @@ public class EQHomeActivity extends ActionBarActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_map) {
-            if (! checkGooglePlayServicesAvailable ()){
-                displayGooglePlayServicesUnavailableText();
+            if (! checkGooglePlayServicesAvailable(this)){
+                displayGooglePlayServicesUnavailableText(this);
             }
             Intent intent = new Intent(getApplicationContext(), EQMapActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -87,7 +84,7 @@ public class EQHomeActivity extends ActionBarActivity
 
         /*if the google play services are not available the framework
         provide a view to the user to update the services*/
-        if (checkGooglePlayServicesAvailable()) {
+        if (checkGooglePlayServicesAvailable(this)) {
             //if fragment exists in the layout that means the app is running on a table
 
             if (fragment == null || !fragment.isInLayout()) {
@@ -99,23 +96,12 @@ public class EQHomeActivity extends ActionBarActivity
                 fragment.setEarthQuakeMarker(earthQuake);
             }
         } else {
-            displayGooglePlayServicesUnavailableText();
+            displayGooglePlayServicesUnavailableText(this);
             if (fragment == null || !fragment.isInLayout()) {
                 Intent intent = new Intent(getApplicationContext(), EQMapActivity.class);
                 startActivity(intent);
             }
         }
-    }
-
-    private boolean checkGooglePlayServicesAvailable (){
-        int connectionResult = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        return connectionResult == ConnectionResult.SUCCESS;
-    }
-
-    private void displayGooglePlayServicesUnavailableText(){
-        Toast.makeText(this,
-                getString(R.string.google_play_sevices_not_available), Toast.LENGTH_SHORT)
-                .show();
     }
 
     private final IDataAccessor.DataAccessorListener <List<EarthQuake>> mDataAccessorListener =
@@ -127,7 +113,7 @@ public class EQHomeActivity extends ActionBarActivity
                     mProgressBar.setVisibility(View.GONE);
                     ItemFragment itemFragment = (ItemFragment)
                             getSupportFragmentManager().findFragmentById(R.id.list_fragment);
-                    earthQuakeList= sort(sortingOrder, earthQuakeList);
+                    earthQuakeList= EarthQuakeUtility.sort(mSortingOrder, earthQuakeList);
                     if (itemFragment != null){
                         itemFragment.updateData(earthQuakeList);
                     }
@@ -141,22 +127,10 @@ public class EQHomeActivity extends ActionBarActivity
                 }
             };
 
-    private static List<EarthQuake> sort(SortingOrder sortingOrder, List<EarthQuake> earthQuakeList) {
-
-        if (sortingOrder == SortingOrder.DATE_DESC ){
-            Collections.sort(earthQuakeList, EarthQuake.getDateComparator());
-            Collections.reverse(earthQuakeList);
-        } else {
-            Collections.sort(earthQuakeList);
-            Collections.reverse(earthQuakeList);
-        }
-        return earthQuakeList;
-    }
-
     private void getData (){
         mProgressBar.setVisibility(View.VISIBLE);
         IDataAccessor dataAccessor = DataAccessors.getAccessor(this,
-                EARTH_QUAKE_DATA_ACCESSOR_KEY);
+                DATA_ACCESSORS_ENUM.EARTH_QUAKE_DATA_ACCESSOR);
         dataAccessor.getAll(mDataAccessorListener);
     }
 }

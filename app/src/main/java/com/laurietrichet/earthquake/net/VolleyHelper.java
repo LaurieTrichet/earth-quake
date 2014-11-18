@@ -31,7 +31,16 @@ public enum  VolleyHelper {
         return mRequestQueue.add(request);
     }
 
-    public Cache getCache (){
+    /**
+     * Returns the cache of the request queue, throws an exception if the queue is not initialized.
+     * To do so the addToRequestQueue function has to be called.
+     * @return Cache // the cache of the request queue
+     * @throws Exception // if the request queue is null
+     */
+    public Cache getCache () throws Exception{
+        if (mRequestQueue == null){
+            throw new Exception("Request queue must be initialized.");
+        }
         return mRequestQueue.getCache();
     }
 

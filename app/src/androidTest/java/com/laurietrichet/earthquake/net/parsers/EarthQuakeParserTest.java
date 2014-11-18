@@ -16,15 +16,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static com.laurietrichet.earthquake.net.parsers.EarthQuakeParser.DEPTH;
-import static com.laurietrichet.earthquake.net.parsers.EarthQuakeParser.EARTHQUAKES;
-import static com.laurietrichet.earthquake.net.parsers.EarthQuakeParser.EQID;
-import static com.laurietrichet.earthquake.net.parsers.EarthQuakeParser.LAT;
-import static com.laurietrichet.earthquake.net.parsers.EarthQuakeParser.LON;
-import static com.laurietrichet.earthquake.net.parsers.EarthQuakeParser.MAGNITUDE;
-import static com.laurietrichet.earthquake.net.parsers.EarthQuakeParser.REGION;
-import static com.laurietrichet.earthquake.net.parsers.EarthQuakeParser.SRC;
-import static com.laurietrichet.earthquake.net.parsers.EarthQuakeParser.TIMEDATE;
+import static com.laurietrichet.earthquake.net.parsers.EarthQuakeParser.EQFields;
 
 public class EarthQuakeParserTest extends InstrumentationTestCase {
 
@@ -47,25 +39,27 @@ public class EarthQuakeParserTest extends InstrumentationTestCase {
         List <EarthQuake> arrayEarthQuakes = EarthQuakeParser.parse(json);
         Assert.assertTrue(arrayEarthQuakes.size() == 18);
         int index = 0;
-        JSONArray jsonArray = jsonResponse.getJSONArray(EARTHQUAKES);
+        JSONArray jsonArray = jsonResponse.getJSONArray(EQFields.earthquakes.name());
         JSONObject jsonItem = jsonArray.getJSONObject(index);
+
 //{"src":"us","eqid":"c000is61","timedate":"2013-07-29 22:22:48","lat":"7.6413","lon":"93.6871",
 // "magnitude":"4.6","depth":"40.90","region":"Nicobar Islands, India region"}
-        EarthQuake item = new EarthQuake.Builder ().eqid(jsonItem.getString(EQID)).build();
 
-        int pos = Collections.binarySearch(arrayEarthQuakes,item,EarthQuake.getEqidComparator());
+        EarthQuake item = new EarthQuake.Builder().eqid(jsonItem.getString(EQFields.eqid.name())).build();
+
+        int pos = Collections.binarySearch(arrayEarthQuakes,item);
         Assert.assertTrue(pos >= 0);
 
         item = arrayEarthQuakes.get(pos);
 
-        Assert.assertTrue(item.getSrc().equals(jsonItem.getString(SRC)));
-        Assert.assertTrue(item.getEqid().equals(jsonItem.getString(EQID)));
-        Date dateFromJson = EarthQuake.getDateFormat().parse(jsonItem.optString(TIMEDATE, null));
+        Assert.assertTrue(item.getSrc().equals(jsonItem.getString(EQFields.src.name())));
+        Assert.assertTrue(item.getEqid().equals(jsonItem.getString(EQFields.eqid.name())));
+        Date dateFromJson = EarthQuake.getDateFormat().parse(jsonItem.optString(EQFields.timedate.name(), null));
         Assert.assertTrue(item.getTimedate().equals(dateFromJson));
-        Assert.assertTrue(item.getRegion().equals(jsonItem.getString(REGION)));
-        Assert.assertTrue(item.getLat().equals(Float.parseFloat(jsonItem.optString(LAT, null))));
-        Assert.assertTrue(item.getLon().equals(Float.parseFloat(jsonItem.optString(LON, null))));
-        Assert.assertTrue(item.getDepth() == jsonItem.getDouble(DEPTH));
-        Assert.assertTrue(item.getMagnitude() == jsonItem.getDouble(MAGNITUDE));
+        Assert.assertTrue(item.getRegion().equals(jsonItem.getString(EQFields.region.name())));
+        Assert.assertTrue(item.getLat().equals(Float.parseFloat(jsonItem.optString(EQFields.lat.name(), null))));
+        Assert.assertTrue(item.getLon().equals(Float.parseFloat(jsonItem.optString(EQFields.lon.name(), null))));
+        Assert.assertTrue(item.getDepth() == jsonItem.getDouble(EQFields.depth.name()));
+        Assert.assertTrue(item.getMagnitude() == jsonItem.getDouble(EQFields.magnitude.name()));
     }
 }

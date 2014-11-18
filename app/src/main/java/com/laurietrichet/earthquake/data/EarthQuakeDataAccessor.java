@@ -13,9 +13,9 @@ import static com.laurietrichet.earthquake.net.client.AbstractWebServiceClient.W
 /**
  * Implementation of {@link com.laurietrichet.earthquake.data.IDataAccessor} for EarthQuake object
  */
-public class EarthQuakeDataAccessor implements IDataAccessor {
+class EarthQuakeDataAccessor implements IDataAccessor {
 
-    private AbstractWebServiceClient mClient ;
+    private final AbstractWebServiceClient mClient ;
 
     /**package*/ EarthQuakeDataAccessor (Context context) {
         mClient = new EQWebServiceClient(context.getApplicationContext());

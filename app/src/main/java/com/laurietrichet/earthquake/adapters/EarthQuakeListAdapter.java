@@ -101,7 +101,7 @@ public class EarthQuakeListAdapter extends BaseAdapter{
             }
         }
 
-        this.mEarthQuakeList = earthQuakeList;
+        this.mEarthQuakeList = new ArrayList<EarthQuake>(earthQuakeList);
         notifyDataSetChanged();
     }
 }
